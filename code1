@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Calculator</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+  <script type="text/babel">
+
+    const { useState } = React;
+
+    const Calculator = () => {
+      const [display, setDisplay] = useState('0');
+      const [input, setInput] = useState('');
+
+      const handleNumberClick = (value) => {
+        if (display === '0' && value === '0') return; // Prevent multiple leading zeros
+        if (display === '0' || input === '0') {
+          setDisplay(value);
+          setInput(value);
+        } else {
+          setDisplay(display + value);
+          setInput(input + value);
+        }
+      };
+
+      const handleOperatorClick = (value) => {
+        const operators = ['+', '-', '*', '/'];
+        const lastChar = input.slice(-1);
+
+        if (operators.includes(lastChar)) {
+          setInput(input.slice(0, -1) + value); // Replace last operator with new one
+        } else {
+          setInput(input + value);
+        }
+      };
+
+      const handleDecimalClick = () => {
+        if (!display.includes('.')) {
+          setDisplay(display + '.');
+          setInput(input + '.');
+        }
+      };
+
+      const handleClearClick = () => {
+        setDisplay('0');
+        setInput('');
+      };
+
+      const handleEqualsClick = () => {
+        try {
+          // eslint-disable-next-line
+          const result = eval(input);
+          setDisplay(result.toString());
+          setInput(result.toString());
+        } catch (error) {
+          setDisplay('Error');
+        }
+      };
+
+      return (
+        <div id="calculator" className="container mt-5">
+          <div id="display" className="text-right bg-light p-3 mb-3">{display}</div>
+          <div className="row">
+            <div className="col-md-9">
+              <div className="row">
+                <div className="col">
+                  <button id="seven" className="btn btn-primary btn-block" onClick={() => handleNumberClick('7')}>7</button>
+                </div>
+                <div className="col">
+                  <button id="eight" className="btn btn-primary btn-block" onClick={() => handleNumberClick('8')}>8</button>
+                </div>
+                <div className="col">
+                  <button id="nine" className="btn btn-primary btn-block" onClick={() => handleNumberClick('9')}>9</button>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <button id="four" className="btn btn-primary btn-block" onClick={() => handleNumberClick('4')}>4</button>
+                </div>
+                <div className="col">
+                  <button id="five" className="btn btn-primary btn-block" onClick={() => handleNumberClick('5')}>5</button>
+                </div>
+                <div className="col">
+                  <button id="six" className="btn btn-primary btn-block" onClick={() => handleNumberClick('6')}>6</button>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <button id="one" className="btn btn-primary btn-block" onClick={() => handleNumberClick('1')}>1</button>
+                </div>
+                <div className="col">
+                  <button id="two" className="btn btn-primary btn-block" onClick={() => handleNumberClick('2')}>2</button>
+                </div>
+                <div className="col">
+                  <button id="three" className="btn btn-primary btn-block" onClick={() => handleNumberClick('3')}>3</button>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <button id="zero" className="btn btn-primary btn-block" onClick={() => handleNumberClick('0')}>0</button>
+                </div>
+                <div className="col">
+                  <button id="decimal" className="btn btn-primary btn-block" onClick={handleDecimalClick}>.</button>
+                </div>
+                <div className="col">
+                  <button id="clear" className="btn btn-primary btn-block" onClick={handleClearClick}>AC</button>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="row">
+                <div className="col">
+                  <button id="add" className="btn btn-info btn-block" onClick={() => handleOperatorClick('+')}>+</button>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <button id="subtract" className="btn btn-info btn-block" onClick={() => handleOperatorClick('-')}>-</button>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <button id="multiply" className="btn btn-info btn-block" onClick={() => handleOperatorClick('*')}>*</button>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <button id="divide" className="btn btn-info btn-block" onClick={() => handleOperatorClick('/')}>/</button>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <button id="equals" className="btn btn-success btn-block" onClick={handleEqualsClick}>=</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<Calculator />, document.getElementById('root'));
+
+  </script>
+</body>
+</html>
